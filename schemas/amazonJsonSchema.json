@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "array",
+  "items": {
+    "$ref": "#/Results"
+  },
+  "Results":{
+    "type": "array",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "nameOfTheShow": {
+        "type": "string"
+      },
+      "yearOfRelease": {
+        "type": "integer",
+        "minimum": 1900,
+        "maximum": 2020
+      },
+      "numberOfSeasons": {
+        "type": "integer"
+      },
+      "availableLanguage": {
+        "type": "string",
+        "enum": [
+          "Deutsch",
+          "English",
+          "French",
+          "Hebrew",
+          "Hindi",
+          "Italiano",
+          "Japanese",
+          "Marathi",
+          "Nederland",
+          "Russian",
+          "Serbian",
+          "Spanish",
+          "Suomi",
+          "Telugu"
+        ]
+      },
+      "genres": {
+        "type": "string"
+      },
+      "imdbRating": {
+        "type": "number",
+        "multipleOf": 0.1,
+        "maximum": 10
+
+      },
+      "ageOfViewers": {
+        "type": "string",
+        "enum": [
+          "13+",
+          "16+",
+          "18+",
+          "7+",
+          "All"
+        ]
+      }
+    },
+    "required": [
+      "ageOfViewers",
+      "availableLanguage",
+      "genres",
+      "id",
+      "imdbRating",
+      "nameOfTheShow",
+      "numberOfSeasons",
+      "yearOfRelease"
+    ]
+  }
+}

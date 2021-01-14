@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php 
+
+    require __DIR__ . '/vendor/autoload.php';
     //Hiding warnings because PHP is bugging out -> not a good practice but no better solution right now
     error_reporting(E_ERROR | E_PARSE);
 
@@ -17,6 +19,71 @@
     $amazonTitlesPerYear = array();
     $disneyPlusTitlesPerYear = array();
     $netflixTitlesPerYear = array();
+
+    // Validate using justinrainbow/json-schema
+    $validator = new JsonSchema\Validator;
+
+    //Amazon schema
+    $jsonSchemaAmazon = file_get_contents("schemas/amazonJsonSchema.json");
+    $jsonSchemaDecodedAmazon = json_decode($jsonSchemaAmazon, true);
+
+    //Disney+ schema
+    $jsonSchemaDisneyPlus = file_get_contents("schemas/disneyplusJsonSchema.json");
+    $jsonSchemaDecodedDisneyPlus = json_decode($jsonSchemaDisneyPlus, true);
+
+    //Netflix schema
+    $jsonSchemaNetflix = file_get_contents("schemas/netflixJsonSchema.json");
+    $jsonSchemaDecodedNetflix = json_decode($jsonSchemaNetflix);
+
+    $isValid = true;
+
+    //Amazon
+    $validator->validate($jsonArrayAmazon, $jsonSchemaDecodedAmazon);
+
+    if ($validator->isValid()) {
+        echo "Amazon dataset is valid\n";
+    } else {
+        $isValid = false;
+        echo "<span class='errorMsg'> Amazon does not validate. </span>\n";
+        foreach ($validator->getErrors() as $error) {
+            $validateError = $error['property'] . $error['message'];
+            echo "<script> console.log(' $validateError ')</script>";
+        }
+    }
+    
+
+    //Disney+
+    $validator->validate($jsonArrayDisneyPlus, $jsonSchemaDecodedDisneyPlus);
+
+    if ($validator->isValid()) {
+        echo "Disney+ dataset is valid\n";
+    } else {
+        $isValid = false;
+        echo "<span class='errorMsg'> Disney+ does not validate. </span>\n";
+        foreach ($validator->getErrors() as $error) {
+            $validateError = $error['property'] . $error['message'];
+            echo "<script> console.log(' $validateError ')</script>";
+        }
+    } 
+
+    //Netflix
+    $validator->validate($jsonArrayNetflix, $jsonSchemaDecodedNetflix);
+
+    if ($validator->isValid()) {
+        echo "Netflix dataset is valid\n";
+    } else {
+        $isValid = false;
+        echo "<span class='errorMsg'>Netflix does not validate. </span>\n";
+        foreach ($validator->getErrors() as $error) {
+            $validateError = $error['property'] . $error['message'];
+            echo "<script> console.log(' $validateError ')</script>";
+        }
+    } 
+
+    if (!$isValid)
+    {
+        echo "<span class='errorMsg'>Dataset might be corrupted. See the consol for details.</span>\n";
+    }
 
 
     //Loading how many titles each service added in each year from 2010
@@ -126,6 +193,7 @@
         }
     }
 
+    //Sorting in alphabetical order
     ksort($amazonAgeRating);
     ksort($disneyPlusAgeRating);
     ksort($netflixAgeRating);
