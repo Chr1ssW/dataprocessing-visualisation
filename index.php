@@ -20,18 +20,43 @@
     $jsonArrayNetflix = json_decode($jsonNetflix, true);
 
     $amazonTitlesPerYear = array();
+    $disneyPlusTitlesPerYear = array();
+    $netflixTitlesPerYear = array();
 
     for ($i = 0; $i < sizeof($jsonArrayAmazon); $i++)
     {
-        $key =  $jsonArrayAmazon[$i]['yearOfRelease'];
+        $key = $jsonArrayAmazon[$i]['yearOfRelease'];
 
-        $amazonTitlesPerYear[$key] = $amazonTitlesPerYear[$key] + 1;
+        if ($key != 0)
+        {
+            $amazonTitlesPerYear[$key] = $amazonTitlesPerYear[$key] + 1;
+        }
     }
 
+    for ($i = 0; $i < sizeof($jsonArrayDisneyPlus); $i++)
+    {
+        $key = $jsonArrayDisneyPlus[$i]['addedAt'];
+        $key = (int)substr($key, -4);
 
-    
+        if ($key != 0)
+        {
+            $disneyPlusTitlesPerYear[$key] = $disneyPlusTitlesPerYear[$key] + 1;
+        }
+    }
+
+    for ($i = 0; $i < sizeof($jsonArrayNetflix); $i++)
+    {
+        $key = $jsonArrayNetflix[$i]['dateAdded'];
+        $key = (int)substr($key, -4);
+
+        if ($key != 0)
+        {
+            $netflixTitlesPerYear[$key] = $netflixTitlesPerYear[$key] + 1;
+        }
+    }
+
     echo "<pre>";
-    var_dump($amazonTitlesPerYear);
+    var_dump($netflixTitlesPerYear);
     echo "</pre>";
     ?>
     
