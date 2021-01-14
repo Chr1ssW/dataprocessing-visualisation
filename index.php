@@ -83,6 +83,57 @@
     $netflixAllTitles = sizeof($jsonArrayNetflix);
 
 
+    //Getting the distribution of age ratings per streaming service
+    $amazonAgeRating = array();
+    $disneyPlusAgeRating = array();
+    $netflixAgeRating = array();
+
+    //Amazon
+    for ($i = 0; $i < sizeof($jsonArrayAmazon); $i++)
+    {
+        $key = $jsonArrayAmazon[$i]['ageOfViewers'];
+
+        if ($key != null)
+        {
+            $amazonAgeRating[$key] = $amazonAgeRating[$key] + 1;
+        }
+    }
+
+    //Disney+
+    for ($i = 0; $i < sizeof($jsonArrayDisneyPlus); $i++)
+    {
+        $key = $jsonArrayDisneyPlus[$i]['rated'];
+
+        if ($key != null)
+        {
+            if($key == 'NOT RATED' || $key == 'Not Rated' || $key == 'UNRATED' || $key == 'Unrated')
+            {
+                $key = 'Unrated';
+            }
+
+            $disneyPlusAgeRating[$key] = $disneyPlusAgeRating[$key] + 1;
+        }
+    }
+
+    //Netflix
+    for ($i = 0; $i < sizeof($jsonArrayNetflix); $i++)
+    {
+        $key = $jsonArrayNetflix[$i]['rating'];
+
+        if ($key != null)
+        {
+            $netflixAgeRating[$key] = $netflixAgeRating[$key] + 1;
+        }
+    }
+
+    ksort($amazonAgeRating);
+    ksort($disneyPlusAgeRating);
+    ksort($netflixAgeRating);
+
+    echo "<pre>";
+    var_dump($disneyPlusAgeRating);
+    echo "</pre>";
+
     ?>
 <head>
     <meta charset="UTF-8">
@@ -171,10 +222,113 @@
         chart.draw(view, options);
         }
     </script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
 
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+            ['Rating', 'Number of titles'],
+            <?php 
+                foreach ($amazonAgeRating as $key => $value)
+                {
+                    echo "[' $key ', $value],"; 
+                }
+            ?>
+            ]);
+
+            var options = {
+            title: 'Amazon titles based on age rating',
+            is3D: true,
+            slices: {
+              0: {color: '#ffb700'},
+              1: {color: '#ed9c00'},
+              2: {color: '#db0119'},
+              3: {color: '#a5c400'},
+              4: {color: '#00bd09'}
+          }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+     <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+            ['Rating', 'Number of titles'],
+            <?php 
+                foreach ($disneyPlusAgeRating as $key => $value)
+                {
+                    echo "[' $key ', $value],"; 
+                }
+            ?>
+            ]);
+
+            var options = {
+            title: 'Disney+ titles based on age rating',
+            sliceVisibilityThreshold: 1/20,
+            is3D: true,
+            slices: {
+              0: {color: '#ffb700'},
+              1: {color: '#ed9c00'},
+              2: {color: '#db0119'},
+              3: {color: '#a5c400'},
+              4: {color: '#00bd09'}
+          }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechartDisneyPlus'));
+
+            chart.draw(data, options);
+        }
+    </script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+            ['Rating', 'Number of titles'],
+            <?php 
+                foreach ($netflixAgeRating as $key => $value)
+                {
+                    echo "[' $key ', $value],"; 
+                }
+            ?>
+            ]);
+
+            var options = {
+            title: 'Netflix titles based on age rating',
+            sliceVisibilityThreshold: 1/20,
+            is3D: true,
+            slices: {
+              0: {color: '#ffb700'},
+              1: {color: '#ed9c00'},
+              2: {color: '#db0119'},
+              3: {color: '#a5c400'},
+              4: {color: '#00bd09'}
+          }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechartNetflix'));
+
+            chart.draw(data, options);
+        }
+    </script>
 </head>
 <body>
     <div id="curve_chart" style="width: 900px; height: 500px"></div>
     <div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+    <div id="piechart" style="width: 900px; height: 500px;margin-top: 500px;"></div>
+    <div id="piechartDisneyPlus" style="width: 900px; height: 500px;margin-top: 500px;"></div>
+    <div id="piechartNetflix" style="width: 900px; height: 500px;margin-top: 500px;"></div>
 </body>
 </html>
