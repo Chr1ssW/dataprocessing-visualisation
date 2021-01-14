@@ -1,0 +1,24 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body{
+      background-color: #edebeb;
+  }
+
+  .diagrams{
+      float: left;
+      height: 388px;
+      width: 50%;
+  }
+
+  .piecharts{
+    float: left;
+    width: 33%;
+  }
+
+  #diagrams-container{
+      width: 100%;
+      height: 1000px;
+  }

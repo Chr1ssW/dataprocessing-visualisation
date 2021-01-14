@@ -129,11 +129,6 @@
     ksort($amazonAgeRating);
     ksort($disneyPlusAgeRating);
     ksort($netflixAgeRating);
-
-    echo "<pre>";
-    var_dump($disneyPlusAgeRating);
-    echo "</pre>";
-
     ?>
 <head>
     <meta charset="UTF-8">
@@ -179,14 +174,16 @@
         var options = {
           title: 'Number of titles of big streaming services from 2011',
           legend: { position: 'bottom' },
+            backgroundColor: '#edebeb',
           series: {
               0: {color: '#212e3e'},
               1: {color: '#1e3e8e'},
               2: {color: '#de0912'}
-          }
+          },
+          chartArea:{width:'85%'}
         };
 
-        var chart = new google.visualization.AreaChart(document.getElementById('curve_chart'));
+        var chart = new google.visualization.AreaChart(document.getElementById('allTitlesPerYearChart'));
 
         chart.draw(data, options);
       }
@@ -215,6 +212,7 @@
             title: "Titles per streaming service",
             width: 600,
             height: 400,
+            backgroundColor: '#edebeb',
             bar: {groupWidth: "95%"},
             legend: { position: "none" },
         };
@@ -238,9 +236,11 @@
             ?>
             ]);
 
-            var options = {
+            var options = { 
             title: 'Amazon titles based on age rating',
             is3D: true,
+            backgroundColor: '#edebeb',
+            chartArea: {width:'90%'},
             slices: {
               0: {color: '#ffb700'},
               1: {color: '#ed9c00'},
@@ -275,6 +275,8 @@
             title: 'Disney+ titles based on age rating',
             sliceVisibilityThreshold: 1/20,
             is3D: true,
+            backgroundColor: '#edebeb',
+            chartArea: {width:'90%'},
             slices: {
               0: {color: '#ffb700'},
               1: {color: '#ed9c00'},
@@ -309,6 +311,8 @@
             title: 'Netflix titles based on age rating',
             sliceVisibilityThreshold: 1/20,
             is3D: true,
+            backgroundColor: '#edebeb',
+            chartArea: {width:'90%'},
             slices: {
               0: {color: '#ffb700'},
               1: {color: '#ed9c00'},
@@ -325,10 +329,22 @@
     </script>
 </head>
 <body>
-    <div id="curve_chart" style="width: 900px; height: 500px"></div>
-    <div id="columnchart_values" style="width: 900px; height: 300px;"></div>
-    <div id="piechart" style="width: 900px; height: 500px;margin-top: 500px;"></div>
-    <div id="piechartDisneyPlus" style="width: 900px; height: 500px;margin-top: 500px;"></div>
-    <div id="piechartNetflix" style="width: 900px; height: 500px;margin-top: 500px;"></div>
+    <div id="diagrams-container">
+        <div class="diagrams">
+            <div id="allTitlesPerYearChart" style="width: 100%; height: 388px;"></div>
+        </div>
+        <div class="diagrams">
+            <div id="columnchart_values"  style="width: 100%; height: 300px;"></div>
+        </div>
+        <div class="piecharts">
+            <div id="piechart" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div class="piecharts">
+            <div id="piechartDisneyPlus" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div class="piecharts">
+            <div id="piechartNetflix" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
 </body>
 </html>
